@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     'vue/multi-word-component-names': 0, // 驼峰报错-横线
     '@typescript-eslint/no-var-requires': 0, // require导入
-    'vue/require-default-prop': 0 // props默认值
+    'vue/require-default-prop': 0, // props默认值
+    'vue/valid-define-props': 0 // 引用本地声明的变量
   }
 }
