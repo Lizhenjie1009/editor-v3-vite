@@ -2,8 +2,8 @@ import { mapValues, without } from 'lodash-es'
 
 // 编辑器通用属性
 export const commonDefaultProps = {
-  // actions
-  actionsType: '',
+  // actions事件
+  actionType: '',
   url: '',
   // size
   height: '',

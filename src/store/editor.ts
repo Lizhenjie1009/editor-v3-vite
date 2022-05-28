@@ -24,7 +24,16 @@ export const testComponents: ComponentData[] = [
     name: 'l-text',
     props: { text: 'hello2', fontSize: '30px', fontWeight: 'bold' }
   },
-  { id: uuidv4(), name: 'l-text', props: { text: 'hello3', fontSize: '40px' } }
+  {
+    id: uuidv4(),
+    name: 'l-text',
+    props: {
+      text: 'hello3',
+      fontSize: '40px',
+      actionType: 'url',
+      url: 'https://www.baidu.com'
+    }
+  }
 ]
 
 const editor: Module<EditorProps, GlobalDataProps> = {

@@ -1,17 +1,22 @@
 <template>
-  <component :is="tag" :style="styleProps" class="l-text-component">
+  <component
+    :is="tag"
+    :style="styleProps"
+    class="l-text-component"
+    @click="handleClick"
+  >
     {{ text }}
   </component>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed } from 'vue'
-import { pick } from 'lodash-es'
+import { defineProps } from 'vue'
 import {
   transformToComponentProps,
   textDefaultProps,
   textStylePropNames
 } from '../defaultProps'
+import useComponentCommon from '@/hooks/useComponentCommon'
 
 // 1.生成props数据，不能使用自己导入的数据。按照2使用，
 // const defaultProps = transformToComponentProps(textDefaultProps)
@@ -23,11 +28,11 @@ const props = defineProps({
   }
 })
 // console.log(props)
-/**
- * pick:
- *  {fontSize: '10px'}
- */
-const styleProps = computed(() => pick(props, textStylePropNames))
+
+const { styleProps, handleClick } = useComponentCommon(
+  props,
+  textStylePropNames
+)
 </script>
 
 <script lang="ts">
