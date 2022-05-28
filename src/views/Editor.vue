@@ -4,7 +4,7 @@
       <a-col :span="6">
         <a-layout-sider class="editor-col">
           <h1>组件列表</h1>
-          <components-list :list="defaultTextTemplates" />
+          <components-list :list="defaultTextTemplates" @onItemEmit="addItem" />
         </a-layout-sider>
       </a-col>
       <a-col :span="12">
@@ -40,6 +40,10 @@ import ComponentsList from '@/components/ComponentsList.vue'
 import { defaultTextTemplates } from '../defaultTemplates'
 const store = useStore<GlobalDataProps>()
 const components = computed(() => store.state.editor.components)
+
+const addItem = (data: any) => {
+  store.commit('addComponent', data)
+}
 </script>
 
 <script lang="ts">
