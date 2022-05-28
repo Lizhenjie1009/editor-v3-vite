@@ -51,7 +51,9 @@ export const textStylePropNames = without(
 )
 
 // 处理为vue-props声明的值
-export const transformToComponentProps = (props: { [key: string]: any }) => {
+export const transformToComponentProps = <T extends { [key: string]: any }>(
+  props: T
+) => {
   return mapValues(props, item => {
     // item：值
     // item.constructor：当前item的实例String/Number
