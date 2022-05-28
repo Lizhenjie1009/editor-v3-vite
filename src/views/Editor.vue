@@ -4,6 +4,7 @@
       <a-col :span="6">
         <a-layout-sider class="editor-col">
           <h1>组件列表</h1>
+          <components-list :list="defaultTextTemplates" />
         </a-layout-sider>
       </a-col>
       <a-col :span="12">
@@ -35,6 +36,8 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store/index'
+import ComponentsList from '@/components/ComponentsList.vue'
+import { defaultTextTemplates } from '../defaultTemplates'
 const store = useStore<GlobalDataProps>()
 const components = computed(() => store.state.editor.components)
 </script>

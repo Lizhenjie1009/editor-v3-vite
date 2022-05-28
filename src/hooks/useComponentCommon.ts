@@ -7,6 +7,7 @@ const useComponentCommon = <T extends { [key: string]: any }>(
   picks: string[]
 ) => {
   /**
+   * 转成style样式
    * pick:
    *  {fontSize: '10px'}
    */
