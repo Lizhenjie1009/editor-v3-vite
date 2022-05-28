@@ -7,7 +7,7 @@ export interface EditorProps {
   components: ComponentData[]
   currentElement: string
 }
-interface ComponentData {
+export interface ComponentData {
   props: { [key: string]: any } // 索引签名
   id: string
   name: string
@@ -41,6 +41,10 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     components: testComponents,
     currentElement: ''
   },
+  getters: {
+    getCurrentElement: state =>
+      state.components.find(component => component.id === state.currentElement)
+  },
   mutations: {
     addComponent(state, data) {
       const newComponent: ComponentData = {
@@ -49,6 +53,9 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         props: data
       }
       state.components.push(newComponent)
+    },
+    setActive(state, id) {
+      state.currentElement = id
     }
   }
 }
