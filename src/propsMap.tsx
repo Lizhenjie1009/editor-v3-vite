@@ -1,4 +1,5 @@
 // 右侧属性列表
+import { VNode, h } from 'vue'
 import { TextComponentProps } from './defaultProps'
 
 // 对应右侧的antd组件及属性
@@ -9,7 +10,7 @@ export interface PropToForm {
     [key: string]: any
   }
   subComponent?: string
-  options?: { text: string; value: any }[]
+  options?: { text: string | VNode; value: any }[]
   initalTransform?: (v: any) => any // 转换组件库对应需要的类型
   afterTransform?: (v: any) => any // 复原原属性值
   valueProp?: string // 非组件库组件
@@ -19,6 +20,20 @@ export interface PropToForm {
 export type PropsToForms = {
   [key in keyof TextComponentProps]?: PropToForm
 }
+const fontFamilyArr = [
+  { value: '', text: '无' },
+  { text: '宋体', value: '"SimSun","STSong"' },
+  { text: '黑体', value: '"SimHei","STHeiti"' },
+  { text: '楷体', value: '"KaiTi","STKaiti"' },
+  { text: '仿宋', value: '"FangSong","STFangsong"' }
+]
+const fontFamilOptions = fontFamilyArr.map(font => {
+  return {
+    value: font.value,
+    // text: h('span', { style: { fontFamily: font.value } }, font.text)
+    text: <span style={{fontFamily: font.value}}>{font.text}</span>
+  }
+})
 
 // 右侧展示的属性组件
 export const mapPropsToForms: PropsToForms = {
@@ -63,12 +78,6 @@ export const mapPropsToForms: PropsToForms = {
     component: 'a-select',
     subComponent: 'a-select-option',
     text: '字体',
-    options: [
-      { value: '', text: '无' },
-      { text: '宋体', value: '"SimSun","STSong"' },
-      { text: '黑体', value: '"SimHei","STHeiti"' },
-      { text: '楷体', value: '"KaiTi","STKaiti"' },
-      { text: '仿宋', value: '"FangSong","STFangsong"' }
-    ]
+    options: [{ value: '', text: '无' }, ...fontFamilOptions]
   }
 }
