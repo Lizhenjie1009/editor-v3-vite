@@ -8,7 +8,19 @@
           v-if="value"
           :value="value.value"
           v-bind="value.extraProps"
-        />
+        >
+          <!-- 渲染嵌套组件 -->
+          <template v-if="value.options">
+            <component
+              :is="value.subComponent"
+              v-for="(option, key) in value.options"
+              :key="key"
+              :value="option.value"
+            >
+              {{ option.text }}
+            </component>
+          </template>
+        </component>
       </div>
     </div>
   </div>
@@ -40,8 +52,7 @@ const finalProps = computed(() => {
       const newKey = key as keyof TextComponentProps
       const item = mapPropsToForms[newKey]
       if (item) {
-        // 和newKey同理
-        item.value = value as keyof TextComponentProps
+        item.value = item.initalTransform ? item.initalTransform(value) : value
         // {} as PropsToForms
         // {} as Required<PropsToForms> 必选类型不会推断出问题
         /**
@@ -68,6 +79,6 @@ const finalProps = computed(() => {
   width: 20%;
 }
 .prop-component {
-  wdith: 70%;
+  width: 70%;
 }
 </style>

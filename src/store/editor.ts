@@ -17,7 +17,14 @@ export const testComponents: ComponentData[] = [
   {
     id: uuidv4(),
     name: 'l-text',
-    props: { text: 'hello', fontSize: '20px', color: 'red', lineHeight: '1' }
+    props: {
+      text: 'hello',
+      fontSize: '20px',
+      color: 'red',
+      lineHeight: '1',
+      textAlign: 'left',
+      fontFamily: ''
+    }
   },
   {
     id: uuidv4(),
@@ -26,7 +33,9 @@ export const testComponents: ComponentData[] = [
       text: 'hello2',
       fontSize: '30px',
       fontWeight: 'bold',
-      lineHeight: '2'
+      lineHeight: '2',
+      textAlign: 'left',
+      fontFamily: ''
     }
   },
   {
@@ -36,7 +45,10 @@ export const testComponents: ComponentData[] = [
       text: 'hello3',
       fontSize: '40px',
       actionType: 'url',
-      url: 'https://www.baidu.com'
+      url: 'https://www.baidu.com',
+      lineHeight: '3',
+      textAlign: 'left',
+      fontFamily: ''
     }
   }
 ]
