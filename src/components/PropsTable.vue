@@ -19,6 +19,7 @@
               :value="option.value"
             >
               {{ option.text }}
+              <!-- <render-vnode :v-node="option.text"></render-vnode> -->
             </component>
           </template>
         </component>
@@ -32,6 +33,7 @@ import { defineProps, PropType, computed, defineEmits } from 'vue'
 import { reduce } from 'lodash'
 import { TextComponentProps } from '../defaultProps'
 import { mapPropsToForms } from '../propsMap'
+import RenderVnode from '@/components/RenderVnode'
 
 // 当前渲染所需要的类型
 interface FormProps {
