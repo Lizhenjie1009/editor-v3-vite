@@ -5,7 +5,6 @@ import { TextComponentProps } from './defaultProps'
 export interface PropToForm {
   component: string
   text?: string
-  value?: string
   extraProps?: {
     [key: string]: any
   }
@@ -13,6 +12,7 @@ export interface PropToForm {
   options?: { text: string; value: any }[]
   initalTransform?: (v: any) => any // 转换组件库对应需要的类型
   valueProp?: string // 非组件库组件
+  eventName?: string
 }
 
 export type PropsToForms = {

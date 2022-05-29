@@ -34,6 +34,7 @@
           <props-table
             v-if="currentElement && currentElement.props"
             :props="currentElement.props"
+            @change="handleChange"
           />
           <pre>{{ currentElement && currentElement.props }}</pre>
         </a-layout-sider>
@@ -65,6 +66,11 @@ const addItem = (data: any) => {
 // 从画布区域选择当前选中
 const setActive = (id: string) => {
   store.commit('setActive', id)
+}
+
+// 接受右侧属性事件
+const handleChange = (e: any) => {
+  console.log(e)
 }
 </script>
 
