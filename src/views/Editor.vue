@@ -31,6 +31,10 @@
       <a-col :span="6">
         <a-layout-sider class="editor-col">
           <h1>组件属性</h1>
+          <props-table
+            v-if="currentElement && currentElement.props"
+            :props="currentElement.props"
+          />
           <pre>{{ currentElement && currentElement.props }}</pre>
         </a-layout-sider>
       </a-col>
@@ -46,6 +50,7 @@ import { ComponentData } from '../store/editor'
 import ComponentsList from '@/components/ComponentsList.vue'
 import { defaultTextTemplates } from '../defaultTemplates'
 import EditWrapper from '@/components/EditWrapper.vue'
+import PropsTable from '@/components/PropsTable.vue'
 const store = useStore<GlobalDataProps>()
 const components = computed(() => store.state.editor.components)
 // 获取选中节点--未点击之前类型是null，点击之后是ComponentData

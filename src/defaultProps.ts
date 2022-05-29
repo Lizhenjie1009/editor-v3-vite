@@ -64,3 +64,39 @@ export const transformToComponentProps = <T extends { [key: string]: any }>(
     }
   })
 }
+
+export interface TextComponentProps {
+  text?: string
+  fontSize?: string
+  fontFamily?: string
+  fontWeight?: string
+  fontStyle?: string
+  textDecoration?: string
+  lineHeight?: string
+  textAlign?: string
+  color?: string
+  backgroundColor?: string
+  // actions事件
+  actionType?: string
+  url?: string
+  // size
+  height?: string
+  width?: string
+  paddingLeft?: string
+  paddingRight?: string
+  paddingTop?: string
+  paddingBottom?: string
+  // border type
+  borderStyle?: string
+  borderColor?: string
+  borderWdith?: string
+  borderRadius?: string
+  // shadow and opacity
+  boxShadow?: string
+  opacity?: number
+  // position and x,y
+  position?: string
+  left?: string
+  top?: string
+  right?: string
+}
