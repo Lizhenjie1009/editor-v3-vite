@@ -11,6 +11,7 @@ export interface PropToForm {
   subComponent?: string
   options?: { text: string; value: any }[]
   initalTransform?: (v: any) => any // 转换组件库对应需要的类型
+  afterTransform?: (v: any) => any // 复原原属性值
   valueProp?: string // 非组件库组件
   eventName?: string
 }
@@ -26,12 +27,14 @@ export const mapPropsToForms: PropsToForms = {
     component: 'a-textarea',
     extraProps: {
       rows: 3
-    }
+    },
+    afterTransform: (e: any) => e.target.value
   },
   fontSize: {
     text: '字号',
     component: 'a-input-number',
-    initalTransform: (v: string) => parseInt(v)
+    initalTransform: (v: string) => parseInt(v),
+    afterTransform: (e: number) => (e ? `${e}px` : '')
   },
   lineHeight: {
     text: '行高',
@@ -42,7 +45,8 @@ export const mapPropsToForms: PropsToForms = {
       max: 3,
       step: 0.1
     },
-    initalTransform: (v: string) => parseFloat(v)
+    initalTransform: (v: string) => parseFloat(v),
+    afterTransform: (e: number) => e.toString()
   },
   textAlign: {
     component: 'a-radio-group',
@@ -52,7 +56,8 @@ export const mapPropsToForms: PropsToForms = {
       { value: 'left', text: '左' },
       { value: 'center', text: '中' },
       { value: 'right', text: '右' }
-    ]
+    ],
+    afterTransform: (e: any) => e.target.value
   },
   fontFamily: {
     component: 'a-select',

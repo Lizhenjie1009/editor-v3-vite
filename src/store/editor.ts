@@ -73,6 +73,16 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     },
     setActive(state, id) {
       state.currentElement = id
+    },
+    updateComponent(state, { key, value }) {
+      // 找到当前的元素
+      const updateComponent = state.components.find(
+        component => component.id === state.currentElement
+      )
+
+      if (updateComponent) {
+        updateComponent.props[key] = value
+      }
     }
   }
 }

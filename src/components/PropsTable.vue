@@ -75,7 +75,8 @@ const finalProps = computed(() => {
         const {
           valueProp = 'value',
           eventName = 'change',
-          initalTransform
+          initalTransform,
+          afterTransform
         } = item
         const newItem: FormProps = {
           ...item,
@@ -84,7 +85,11 @@ const finalProps = computed(() => {
           eventName,
           events: {
             // [eventName]动态加载事件名称
-            [eventName]: (e: any) => emit('change', { key, value: e })
+            [eventName]: (e: any) =>
+              emit('change', {
+                key,
+                value: afterTransform ? afterTransform(e) : e
+              })
           }
         }
         // item.value = item.initalTransform ? item.initalTransform(value) : value

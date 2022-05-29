@@ -71,6 +71,7 @@ const setActive = (id: string) => {
 // 接受右侧属性事件
 const handleChange = (e: any) => {
   console.log(e)
+  store.commit('updateComponent', e)
 }
 </script>
 
