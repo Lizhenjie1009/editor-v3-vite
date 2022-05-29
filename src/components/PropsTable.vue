@@ -6,7 +6,7 @@
         <component
           :is="value.component"
           v-if="value"
-          :value="value.value"
+          :[value.valueProp]="value.value"
           v-bind="value.extraProps"
         >
           <!-- 渲染嵌套组件 -->
@@ -53,6 +53,7 @@ const finalProps = computed(() => {
       const item = mapPropsToForms[newKey]
       if (item) {
         item.value = item.initalTransform ? item.initalTransform(value) : value
+        item.valueProp = item.valueProp ? item.valueProp : 'value'
         // {} as PropsToForms
         // {} as Required<PropsToForms> 必选类型不会推断出问题
         /**

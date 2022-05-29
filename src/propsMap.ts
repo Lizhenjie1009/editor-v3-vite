@@ -12,6 +12,7 @@ export interface PropToForm {
   subComponent?: string
   options?: { text: string; value: any }[]
   initalTransform?: (v: any) => any // 转换组件库对应需要的类型
+  valueProp?: string // 非组件库组件
 }
 
 export type PropsToForms = {
