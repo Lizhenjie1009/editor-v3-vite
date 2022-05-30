@@ -3,10 +3,11 @@
     action="https://jsonplaceholder.typicode.com/posts/"
     :before-upload="uploadValid"
     drag
+    :auto-upload="false"
   >
-    <template #uploaded="scope">
+    <!-- <template #uploaded="scope">
       <div>{{ scope }}</div>
-    </template>
+    </template> -->
   </uploader>
   <router-view></router-view>
 </template>
