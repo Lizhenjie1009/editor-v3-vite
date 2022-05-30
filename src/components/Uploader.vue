@@ -1,6 +1,11 @@
 <template>
   <div class="file-upload">
-    <div class="upload-area" @click="triggerUpload">
+    <div
+      class="upload-area"
+      :class="{ 'is-dragover': drag && isDragOver }"
+      v-on="events"
+    >
+      <!-- @click="triggerUpload" -->
       <slot v-if="isUploading" name="loading">
         <button disabled>正在上传</button>
       </slot>
@@ -41,6 +46,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { last } from 'lodash-es'
 
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
+// 使用上传组件的回调类型检测
 type CheckUpload = (file: File) => boolean | Promise<File>
 interface UploadFile {
   uid: string
@@ -56,7 +62,13 @@ const props = defineProps({
     required: true
   },
   beforeUpload: {
+    // 上传之前的钩子回调函数
     type: Function as PropType<CheckUpload>
+  },
+  drag: {
+    // 拖拽
+    type: Boolean,
+    default: false
   }
 })
 
@@ -69,6 +81,7 @@ const triggerUpload = () => {
 }
 
 const uploadFiles = ref<UploadFile[]>([])
+const isDragOver = ref(false)
 const isUploading = computed(() => {
   return uploadFiles.value.some(file => file.status === 'loading')
 })
@@ -89,33 +102,9 @@ const removeFile = (id: string) => {
 // 上传
 const fileStatus = ref<UploadStatus>('ready')
 const handleFileChange = (e: Event) => {
-  console.log(111)
   const target = e.target as HTMLInputElement
   const files = target.files
-  if (files) {
-    const uploadedFile = files[0]
-    if (props.beforeUpload) {
-      const result = props.beforeUpload(uploadedFile)
-      // 判断是不是promise
-      if (result && result instanceof Promise) {
-        result
-          .then(processedFile => {
-            if (processedFile instanceof File) {
-              postFile(processedFile)
-            } else {
-              throw new Error('beforeUpload Promise should return File object')
-            }
-          })
-          .catch(err => {
-            console.error(err)
-          })
-      } else if (result === true) {
-        postFile(uploadedFile)
-      }
-    } else {
-      postFile(uploadedFile)
-    }
-  }
+  uploadedFiles(files)
 }
 
 const postFile = (uploadedFile: File) => {
@@ -154,6 +143,57 @@ const postFile = (uploadedFile: File) => {
         fileInput.value.value = ''
       }
     })
+}
+
+const uploadedFiles = (files: null | FileList) => {
+  if (files) {
+    const uploadedFile = files[0]
+    if (props.beforeUpload) {
+      const result = props.beforeUpload(uploadedFile)
+      // 判断是不是promise
+      if (result && result instanceof Promise) {
+        result
+          .then(processedFile => {
+            if (processedFile instanceof File) {
+              postFile(processedFile)
+            } else {
+              throw new Error('beforeUpload Promise should return File object')
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      } else if (result === true) {
+        postFile(uploadedFile)
+      }
+    } else {
+      postFile(uploadedFile)
+    }
+  }
+}
+
+// ts v-on='{'click': fn}'
+let events: { [key: string]: (e: any) => void } = {
+  click: triggerUpload
+}
+const handleDrag = (e: DragEvent, over: boolean) => {
+  e.preventDefault()
+  isDragOver.value = over
+}
+const handleDrop = (e: DragEvent) => {
+  e.preventDefault()
+  isDragOver.value = false
+  if (e.dataTransfer) {
+    uploadedFiles(e.dataTransfer.files)
+  }
+}
+if (props.drag) {
+  events = {
+    ...events,
+    dragover: (e: DragEvent) => handleDrag(e, true),
+    dragleave: (e: DragEvent) => handleDrag(e, false),
+    drop: handleDrop
+  }
 }
 </script>
 

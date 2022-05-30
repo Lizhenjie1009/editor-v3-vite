@@ -2,6 +2,7 @@
   <uploader
     action="https://jsonplaceholder.typicode.com/posts/"
     :before-upload="uploadValid"
+    drag
   >
     <template #uploaded="scope">
       <div>{{ scope }}</div>
@@ -18,9 +19,27 @@ const uploadValid = (file: File) => {
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   width: 100%;
   height: 100%;
+}
+
+.file-upload .upload-area {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 20px;
+  width: 360px;
+  height: 180px;
+  text-align: center;
+  &:hover {
+    border: 1px solid #1890ff;
+  }
+  &.is-dragover {
+    border: 2px solid #189;
+    background: rgba(#189, 0.2);
+  }
 }
 </style>
