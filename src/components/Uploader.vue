@@ -35,12 +35,13 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, reactive, computed } from 'vue'
+import { defineProps, ref, reactive, computed, PropType } from 'vue'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { last } from 'lodash-es'
 
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
+type CheckUpload = (file: File) => boolean | Promise<File>
 interface UploadFile {
   uid: string
   size: number
@@ -53,6 +54,9 @@ const props = defineProps({
   action: {
     type: String,
     required: true
+  },
+  beforeUpload: {
+    type: Function as PropType<CheckUpload>
   }
 })
 
@@ -90,42 +94,66 @@ const handleFileChange = (e: Event) => {
   const files = target.files
   if (files) {
     const uploadedFile = files[0]
-    const formData = new FormData()
-    formData.append(uploadedFile.name, uploadedFile)
-    const fileObj = reactive<UploadFile>({
-      uid: uuidv4(),
-      size: uploadedFile.size,
-      name: uploadedFile.name,
-      status: 'loading',
-      raw: uploadedFile
-    })
-    uploadFiles.value.push(fileObj)
-    fileStatus.value = 'loading'
-    axios
-      // .post('http://local.test:7001/api/upload', formData, {
-      .post(props.action, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      .then(res => {
-        fileObj.status = 'success'
-        fileStatus.value = 'success'
-        fileObj.resp = res
-        console.log(res)
-      })
-      .catch(err => {
-        fileObj.status = 'error'
-        fileStatus.value = 'error'
-        console.log(err)
-      })
-      .finally(() => {
-        // 两次点击元素事件一样
-        if (fileInput.value) {
-          fileInput.value.value = ''
-        }
-      })
+    if (props.beforeUpload) {
+      const result = props.beforeUpload(uploadedFile)
+      // 判断是不是promise
+      if (result && result instanceof Promise) {
+        result
+          .then(processedFile => {
+            if (processedFile instanceof File) {
+              postFile(processedFile)
+            } else {
+              throw new Error('beforeUpload Promise should return File object')
+            }
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      } else if (result === true) {
+        postFile(uploadedFile)
+      }
+    } else {
+      postFile(uploadedFile)
+    }
   }
+}
+
+const postFile = (uploadedFile: File) => {
+  const formData = new FormData()
+  formData.append(uploadedFile.name, uploadedFile)
+  const fileObj = reactive<UploadFile>({
+    uid: uuidv4(),
+    size: uploadedFile.size,
+    name: uploadedFile.name,
+    status: 'loading',
+    raw: uploadedFile
+  })
+  uploadFiles.value.push(fileObj)
+  fileStatus.value = 'loading'
+  axios
+    // .post('http://local.test:7001/api/upload', formData, {
+    .post(props.action, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(res => {
+      fileObj.status = 'success'
+      fileStatus.value = 'success'
+      fileObj.resp = res
+      console.log(res)
+    })
+    .catch(err => {
+      fileObj.status = 'error'
+      fileStatus.value = 'error'
+      console.log(err)
+    })
+    .finally(() => {
+      // 两次点击元素事件一样
+      if (fileInput.value) {
+        fileInput.value.value = ''
+      }
+    })
 }
 </script>
 

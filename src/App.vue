@@ -1,5 +1,8 @@
 <template>
-  <uploader action="https://jsonplaceholder.typicode.com/posts/">
+  <uploader
+    action="https://jsonplaceholder.typicode.com/posts/"
+    :before-upload="uploadValid"
+  >
     <template #uploaded="scope">
       <div>{{ scope }}</div>
     </template>
@@ -9,6 +12,10 @@
 
 <script setup lang="ts">
 import Uploader from '@/components/Uploader.vue'
+const uploadValid = (file: File) => {
+  console.log(file)
+  return true
+}
 </script>
 
 <style>
