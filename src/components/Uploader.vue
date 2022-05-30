@@ -1,9 +1,20 @@
 <template>
   <div class="file-upload">
-    <button :disabled="isUploading" @click="triggerUpload">
-      <span v-if="isUploading">正在上传</span>
-      <span v-else>点击上传</span>
-    </button>
+    <div class="upload-area" @click="triggerUpload">
+      <slot v-if="isUploading" name="loading">
+        <button disabled>正在上传</button>
+      </slot>
+      <slot
+        v-else-if="lastFileData && lastFileData.loaded"
+        name="uploaded"
+        :uploaded-data="lastFileData.data"
+      >
+        <button>点击上传</button>
+      </slot>
+      <slot v-else name="default">
+        <button>点击上传</button>
+      </slot>
+    </div>
     <input
       ref="fileInput"
       type="file"
@@ -27,6 +38,7 @@
 import { defineProps, ref, reactive, computed } from 'vue'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import { last } from 'lodash-es'
 
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 interface UploadFile {
@@ -35,6 +47,7 @@ interface UploadFile {
   name: string
   status: UploadStatus
   raw: File
+  resp?: any
 }
 const props = defineProps({
   action: {
@@ -54,6 +67,16 @@ const triggerUpload = () => {
 const uploadFiles = ref<UploadFile[]>([])
 const isUploading = computed(() => {
   return uploadFiles.value.some(file => file.status === 'loading')
+})
+const lastFileData = computed(() => {
+  const lastFile = last(uploadFiles.value)
+  if (lastFile) {
+    return {
+      loaded: lastFile.status === 'success',
+      data: lastFile.resp
+    }
+  }
+  return false
 })
 const removeFile = (id: string) => {
   uploadFiles.value = uploadFiles.value.filter(file => file.uid !== id)
@@ -88,6 +111,7 @@ const handleFileChange = (e: Event) => {
       .then(res => {
         fileObj.status = 'success'
         fileStatus.value = 'success'
+        fileObj.resp = res
         console.log(res)
       })
       .catch(err => {

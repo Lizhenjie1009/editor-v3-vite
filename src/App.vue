@@ -1,5 +1,9 @@
 <template>
-  <uploader action="https://jsonplaceholder.typicode.com/posts/" />
+  <uploader action="https://jsonplaceholder.typicode.com/posts/">
+    <template #uploaded="scope">
+      <div>{{ scope }}</div>
+    </template>
+  </uploader>
   <router-view></router-view>
 </template>
 
