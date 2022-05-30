@@ -18,8 +18,8 @@
               :key="key"
               :value="option.value"
             >
-              {{ option.text }}
-              <!-- <render-vnode :v-node="option.text"></render-vnode> -->
+              <!-- {{ option.text }} -->
+              <render-vnode :v-node="option.text"></render-vnode>
             </component>
           </template>
         </component>
@@ -28,12 +28,21 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+  components: {
+    ColorPicker
+  }
+}
+</script>
+
 <script lang="ts" setup>
 import { defineProps, PropType, computed, defineEmits } from 'vue'
 import { reduce } from 'lodash'
 import { TextComponentProps } from '../defaultProps'
 import { mapPropsToForms } from '../propsMap'
 import RenderVnode from '@/components/RenderVnode'
+import ColorPicker from '@/components/ColorPicker.vue'
 
 // 当前渲染所需要的类型
 interface FormProps {

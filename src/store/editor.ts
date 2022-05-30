@@ -20,7 +20,7 @@ export const testComponents: ComponentData[] = [
     props: {
       text: 'hello',
       fontSize: '20px',
-      color: 'red',
+      color: '#ff0000',
       lineHeight: '1',
       textAlign: 'left',
       fontFamily: ''

@@ -52,6 +52,7 @@ import ComponentsList from '@/components/ComponentsList.vue'
 import { defaultTextTemplates } from '../defaultTemplates'
 import EditWrapper from '@/components/EditWrapper.vue'
 import PropsTable from '@/components/PropsTable.vue'
+
 const store = useStore<GlobalDataProps>()
 const components = computed(() => store.state.editor.components)
 // 获取选中节点--未点击之前类型是null，点击之后是ComponentData
