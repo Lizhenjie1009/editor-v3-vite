@@ -27,7 +27,7 @@
       :style="{ display: 'none' }"
       @change="handleFileChange"
     />
-    <ul>
+    <ul v-if="showUploadList">
       <li
         v-for="file in filesList"
         :key="file.uid"
@@ -47,7 +47,14 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, reactive, computed, PropType } from 'vue'
+import {
+  defineProps,
+  ref,
+  reactive,
+  computed,
+  PropType,
+  defineEmits
+} from 'vue'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { last } from 'lodash-es'
@@ -88,8 +95,14 @@ const props = defineProps({
     // 显示缩略图picture可以预览
     type: String as PropType<FileListType>,
     default: 'text'
+  },
+  showUploadList: {
+    // 显示上传列表
+    type: Boolean
   }
 })
+
+const emit = defineEmits(['success'])
 
 // 按钮模拟点击
 const fileInput = ref<null | HTMLInputElement>(null)
@@ -140,13 +153,15 @@ const postFile = (readyFile: UploadFile) => {
     .then(res => {
       readyFile.status = 'success'
       // fileStatus.value = 'success'
+      res.data.url = readyFile.url
+      emit('success', res)
       readyFile.resp = res
-      console.log(res)
+      // console.log(res, readyFile)
     })
     .catch(err => {
       readyFile.status = 'error'
       // fileStatus.value = 'error'
-      console.log(err)
+      console.error(err)
     })
     .finally(() => {
       // 两次点击元素事件一样

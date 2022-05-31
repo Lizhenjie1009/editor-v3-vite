@@ -1,15 +1,15 @@
 <template>
-  <uploader
+  <!-- <uploader
     action="https://jsonplaceholder.typicode.com/posts/"
     :before-upload="uploadValid"
     drag
     :auto-upload="false"
     list-type="picture"
   >
-    <!-- <template #uploaded="scope">
+    <template #uploaded="scope">
       <div>{{ scope }}</div>
-    </template> -->
-  </uploader>
+    </template>
+  </uploader> -->
   <router-view></router-view>
 </template>
 
@@ -21,7 +21,7 @@ const uploadValid = (file: File) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #app {
   width: 100%;
   height: 100%;

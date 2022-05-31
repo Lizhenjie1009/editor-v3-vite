@@ -5,6 +5,7 @@
         <a-layout-sider class="editor-col">
           <h1>组件列表</h1>
           <components-list :list="defaultTextTemplates" @onItemEmit="addItem" />
+          <style-uploader />
         </a-layout-sider>
       </a-col>
       <a-col :span="12">
@@ -52,6 +53,7 @@ import ComponentsList from '@/components/ComponentsList.vue'
 import { defaultTextTemplates } from '../defaultTemplates'
 import EditWrapper from '@/components/EditWrapper.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import StyleUploader from '@/components/StyleUploader.vue'
 
 const store = useStore<GlobalDataProps>()
 const components = computed(() => store.state.editor.components)
