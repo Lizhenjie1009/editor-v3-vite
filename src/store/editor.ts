@@ -63,13 +63,9 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       state.components.find(component => component.id === state.currentElement)
   },
   mutations: {
-    addComponent(state, data) {
-      const newComponent: ComponentData = {
-        id: uuidv4(),
-        name: 'l-text',
-        props: data
-      }
-      state.components.push(newComponent)
+    addComponent(state, data: ComponentData) {
+      state.components.push(data)
+      console.log(state.components)
     },
     setActive(state, id) {
       state.currentElement = id

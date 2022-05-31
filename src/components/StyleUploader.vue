@@ -5,7 +5,7 @@
     :show-upload-list="false"
     :before-upload="commonUploadCheck"
     list-type="picture"
-    @success="data => handleUploadSuccess(data)"
+    @success="data => handleUploadSuccess(data.data)"
   >
     <div class="uploader-container">
       <h4>上传图片</h4>
@@ -26,9 +26,11 @@
 <script lang="ts" setup>
 import Uploader from './Uploader.vue'
 import { commonUploadCheck } from '../helper'
+import { defineEmits } from 'vue'
 
+const emit = defineEmits(['image-uploaded'])
 const handleUploadSuccess = (data: any) => {
-  console.log(data)
+  emit('image-uploaded', data)
 }
 </script>
 

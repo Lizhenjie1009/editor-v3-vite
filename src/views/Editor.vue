@@ -78,9 +78,11 @@ const handleChange = (e: any) => {
 
 <script lang="ts">
 import LText from '@/components/LText.vue'
+import LImage from '@/components/LImage.vue'
 export default {
   components: {
-    LText
+    LText,
+    LImage
   }
 }
 </script>

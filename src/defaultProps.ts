@@ -42,12 +42,25 @@ export const textDefaultProps = {
   ...commonDefaultProps
 }
 
+// 图片通用属性
+export const imageDefaultProps = {
+  src: '',
+  ...commonDefaultProps
+}
+
 // 移除文本非样式属性
 export const textStylePropNames = without(
   Object.keys(textDefaultProps),
-  'actionsType',
+  'actionType',
   'url',
   'text'
+)
+// 移除图片非样式属性
+export const imageStylePropNames = without(
+  Object.keys(imageDefaultProps),
+  'actionType',
+  'url',
+  'src'
 )
 
 // 处理为vue-props声明的值

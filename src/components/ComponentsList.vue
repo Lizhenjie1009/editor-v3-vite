@@ -11,7 +11,7 @@
     </div>
 
     <!-- 图片 -->
-    <style-uploader />
+    <style-uploader @image-uploaded="onImageUploaded" />
   </div>
 </template>
 
@@ -19,7 +19,9 @@
 import { defineProps, defineEmits } from 'vue'
 import LText from './LText.vue'
 import StyleUploader from '@/components/StyleUploader.vue'
-
+import { v4 as uuidv4 } from 'uuid'
+import { imageDefaultProps } from '../defaultProps'
+import { getImageDimensions } from '../helper'
 defineProps({
   list: {
     type: Array,
@@ -31,6 +33,29 @@ defineProps({
 const emit = defineEmits(['on-item-emit'])
 
 const onItemClick = (data: any) => {
-  emit('on-item-emit', data)
+  emit('on-item-emit', {
+    id: uuidv4(),
+    name: 'l-text',
+    props: data
+  })
+}
+
+const onImageUploaded = (res: any) => {
+  // console.log(res)
+  const componentData = {
+    id: uuidv4(),
+    name: 'l-image',
+    props: {
+      ...imageDefaultProps
+    }
+  }
+  componentData.props.src = res.url
+  getImageDimensions(res.url).then(({ width, height }) => {
+    console.log(width, height)
+    const maxWidth = 373
+    componentData.props.width = (width > maxWidth ? maxWidth : width) + 'px'
+    emit('on-item-emit', componentData)
+  })
+  // emit('on-item-emit', componentData)
 }
 </script>
