@@ -18,7 +18,7 @@
       </slot>
       <slot v-else name="default">
         <button>点击上传2</button>
-        <button @click.stop="uploadFiles">点击上传</button>
+        <button @click.stop="uploadFiles">手动上传</button>
       </slot>
     </div>
     <input
@@ -33,6 +33,12 @@
         :key="file.uid"
         :class="`uploaded-file upload-${file.status}`"
       >
+        <img
+          v-if="file.url && listType === 'picture'"
+          class="file-icon"
+          :src="file.url"
+          :alt="file.name"
+        />
         <span class="filename">{{ file.name }}</span>
         <button class="delete-icon" @click="removeFile(file.uid)">Del</button>
       </li>
@@ -46,6 +52,7 @@ import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { last } from 'lodash-es'
 
+type FileListType = 'picture' | 'text'
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 // 使用上传组件的回调类型检测
 type CheckUpload = (file: File) => boolean | Promise<File>
@@ -56,6 +63,7 @@ interface UploadFile {
   status: UploadStatus
   raw: File
   resp?: any
+  url?: string
 }
 const props = defineProps({
   action: {
@@ -75,6 +83,11 @@ const props = defineProps({
     // 是否自动上传
     type: Boolean,
     default: true
+  },
+  listType: {
+    // 显示缩略图picture可以预览
+    type: String as PropType<FileListType>,
+    default: 'text'
   }
 })
 
@@ -152,6 +165,14 @@ const addFileToList = (uploadedFile: File) => {
     status: 'ready',
     raw: uploadedFile
   })
+  if (props.listType === 'picture') {
+    try {
+      // 创建图片utf-16 bolb链接
+      fileObj.url = URL.createObjectURL(uploadedFile)
+    } catch (err) {
+      console.error('upload File error', err)
+    }
+  }
   filesList.value.push(fileObj)
   if (props.autoUpload) {
     postFile(fileObj)

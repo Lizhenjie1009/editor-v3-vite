@@ -4,6 +4,7 @@
     :before-upload="uploadValid"
     drag
     :auto-upload="false"
+    list-type="picture"
   >
     <!-- <template #uploaded="scope">
       <div>{{ scope }}</div>
