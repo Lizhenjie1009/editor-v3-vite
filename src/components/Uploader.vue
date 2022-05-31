@@ -172,6 +172,8 @@ const addFileToList = (uploadedFile: File) => {
     // } catch (err) {
     //   console.error('upload File error', err)
     // }
+
+    // base64
     const fileReader = new FileReader()
     fileReader.readAsDataURL(uploadedFile)
     fileReader.addEventListener('load', () => {
