@@ -166,12 +166,17 @@ const addFileToList = (uploadedFile: File) => {
     raw: uploadedFile
   })
   if (props.listType === 'picture') {
-    try {
-      // 创建图片utf-16 bolb链接
-      fileObj.url = URL.createObjectURL(uploadedFile)
-    } catch (err) {
-      console.error('upload File error', err)
-    }
+    // try {
+    //   // 创建图片utf-16 bolb链接
+    //   fileObj.url = URL.createObjectURL(uploadedFile)
+    // } catch (err) {
+    //   console.error('upload File error', err)
+    // }
+    const fileReader = new FileReader()
+    fileReader.readAsDataURL(uploadedFile)
+    fileReader.addEventListener('load', () => {
+      fileObj.url = fileReader.result as string
+    })
   }
   filesList.value.push(fileObj)
   if (props.autoUpload) {
